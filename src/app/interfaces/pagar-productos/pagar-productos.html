@@ -1,0 +1,66 @@
+<div class="min-h-screen bg-gray-900 text-white flex items-center justify-center p-6">
+  <div class="max-w-md w-full bg-gray-800 border border-gray-700 p-8 rounded-2xl shadow-2xl relative">
+    
+    <header class="text-center mb-6">
+      <div class="inline-block bg-blue-500/20 p-3 rounded-full text-blue-400 mb-2">
+        <i class="fa-solid fa-lock text-2xl"></i>
+      </div>
+      <h1 class="text-2xl font-bold">Pasarela Segura (Stripe Test)</h1>
+      <p class="text-gray-400 text-sm mt-1">Entorno de simulación de pagos</p>
+    </header>
+
+    @if (mensajeExito) {
+      <div class="bg-green-500/20 border border-green-500 text-green-300 p-4 rounded-xl text-center mb-6 font-semibold">
+        {{ mensajeExito }}
+      </div>
+    }
+
+    <div class="bg-gray-700/50 border border-gray-600 p-4 rounded-xl flex justify-between items-center mb-6">
+      <span class="text-gray-300 font-medium">Total a pagar:</span>
+      <span class="text-2xl font-black text-green-400">${{ montoTotal }} USD</span>
+    </div>
+
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block text-xs text-gray-400 uppercase font-bold mb-1">Titular de la tarjeta</label>
+        <input type="text" [(ngModel)]="titularTarjeta" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500" />
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-400 uppercase font-bold mb-1">Número de tarjeta (Modo Test)</label>
+        <div class="relative">
+          <input type="text" [(ngModel)]="numeroTarjeta" class="w-full bg-gray-700 border border-gray-600 rounded-lg pl-10 pr-4 py-2 text-white focus:outline-none focus:border-blue-500" />
+          <i class="fa-regular fa-credit-card absolute left-3 top-3 text-gray-400"></i>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs text-gray-400 uppercase font-bold mb-1">Expiración</label>
+          <input type="text" [(ngModel)]="expiracionTarjeta" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500" />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 uppercase font-bold mb-1">CVC</label>
+          <input type="text" [(ngModel)]="cvcTarjeta" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500" />
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <button (click)="confirmarPago()" [disabled]="cargando || mensajeExito" 
+              class="w-full bg-green-600 hover:bg-green-500 py-3 rounded-xl font-bold transition flex items-center justify-center gap-2 disabled:opacity-50">
+        @if (cargando) {
+          <i class="fa-solid fa-spinner animate-spin"></i> Procesando...
+        } @else {
+          <i class="fa-solid fa-check"></i> Pagar ${{ montoTotal }} USD
+        }
+      </button>
+
+      <button (click)="cancelarPago()" [disabled]="cargando || mensajeExito"
+              class="w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/50 py-3 rounded-xl font-bold transition">
+        <i class="fa-solid fa-xmark mr-2"></i> Cancelar y Volver
+      </button>
+    </div>
+
+  </div>
+</div>

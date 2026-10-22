@@ -1,0 +1,105 @@
+<div class="min-h-screen bg-gray-900 text-white p-6">
+  <div class="max-w-4xl mx-auto">
+    <header class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
+      <h1 class="text-3xl font-bold text-blue-400">
+        <i class="fa-solid fa-user-shield mr-2"></i> Panel de Administración <i class="fa-solid fa-wrench"></i>
+      </h1>
+      <button (click)="irALaTienda()" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg font-semibold transition">
+        <i class="fa-solid fa-store mr-2"></i> Ir a la Tienda
+      </button>
+    </header>
+
+    @if (mensajeError) {
+      <div class="mb-6 p-4 bg-red-500/20 border border-red-500 text-red-300 rounded-xl text-sm">
+        {{ mensajeError }}
+      </div>
+    }
+    @if (mensajeExito) {
+      <div class="mb-6 p-4 bg-green-500/20 border border-green-500 text-green-300 rounded-xl text-sm">
+        {{ mensajeExito }}
+      </div>
+    }
+
+    <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-xl mb-10">
+      <h2 class="text-xl font-bold mb-4 text-blue-300">
+        <i class="fa-solid fa-circle-plus mr-2"></i> Registrar Nuevo Auto
+      </h2>
+
+      <form (submit)="$event.preventDefault(); guardarAuto()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Nombre del auto</label>
+          <input type="text" [(ngModel)]="nuevoAuto.nombre" name="nombre" required placeholder="Ej. Toyota Supra"
+                class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Marca</label>
+          <input type="text" [(ngModel)]="nuevoAuto.marca" name="marca" required placeholder="Ej. Toyota"
+                class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">Precio (USD)</label>
+          <input type="number" [(ngModel)]="nuevoAuto.precio" name="precio" required placeholder="Ej. 35000"
+                class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1">URL de la Imagen</label>
+          <input type="text" [(ngModel)]="nuevoAuto.imagen" name="imagen" placeholder="https://..."
+                class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-1">Descripción</label>
+          <textarea [(ngModel)]="nuevoAuto.descripcion" name="descripcion" rows="2" placeholder="Detalles del vehículo..."
+                    class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+        </div>
+        <div class="md:col-span-2 mt-2 flex gap-3">
+          <button type="submit" [class]="autoEditandoId ? 'bg-amber-600 hover:bg-amber-500' : 'bg-blue-600 hover:bg-blue-500'" class="flex-1 py-3 rounded-xl font-bold transition">
+            <i [class]="autoEditandoId ? 'fa-solid fa-pen mr-2' : 'fa-solid fa-plus mr-2'"></i> 
+            {{ autoEditandoId ? 'Actualizar Cambios' : 'Guardar en el Catálogo' }}
+          </button>
+
+          @if (autoEditandoId) {
+            <button type="button" (click)="limpiarFormulario()" class="bg-gray-600 hover:bg-gray-500 px-5 py-3 rounded-xl font-bold transition">
+              Cancelar
+            </button>
+          }
+        </div>
+      </form>
+    </div>
+
+    <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-xl">
+      <h2 class="text-xl font-bold mb-4 text-red-400">
+        <i class="fa-solid fa-trash-can mr-2"></i> Administrar Inventario Actual
+      </h2>
+
+      @if (autos.length === 0) {
+        <p class="text-gray-400 text-center py-4">No hay autos registrados todavía.</p>
+      }
+
+      <div class="space-y-3">
+        @for (auto of autos; track auto.id) {
+          <div class="flex items-center justify-between bg-gray-700/50 p-4 rounded-xl border border-gray-600 gap-4">
+            
+            <div class="flex items-center space-x-4">
+              <img [src]="obtenerUrlImagen(auto.imagen)" [alt]="auto.nombre" class="w-16 h-12 object-cover rounded-lg bg-gray-600">
+              <div>
+                <h4 class="font-bold text-lg">{{ auto.nombre }}</h4>
+                <p class="text-xs text-blue-300 uppercase">{{ auto.marca }} — ${{ auto.precio }} USD</p>
+              </div>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+              <button (click)="editarAuto(auto.id)" class="bg-blue-600 hover:bg-blue-500 px-3 py-2 rounded-lg text-sm transition flex items-center gap-1.5">
+                <i class="fa-solid fa-pen"></i> Editar
+              </button>
+              
+              <button (click)="eliminarAuto(auto.id)" class="bg-red-600 hover:bg-red-500 px-3 py-2 rounded-lg text-sm transition flex items-center gap-1.5">
+                <i class="fa-solid fa-trash"></i> Eliminar
+              </button>
+            </div>
+
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

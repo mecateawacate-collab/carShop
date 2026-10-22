@@ -1,0 +1,65 @@
+<div class="min-h-screen bg-gray-900 text-white p-6">
+  <div class="max-w-6xl mx-auto">
+    <header class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-blue-400">
+        carShop - Catálogo <i class="fa-solid fa-car"></i>
+      </h1>
+      <button (click)="abrirCarrito()" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2">
+        Ver Carrito <i class="fa-solid fa-cart-shopping"></i>
+      </button>
+    </header>
+
+    <div class="mb-8">
+      <input 
+        type="text" 
+        [(ngModel)]="terminoBusqueda" 
+        (input)="buscarAutos()"
+        placeholder="Busca por marca o modelo (ej. Toyota, Mustang)..." 
+        class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:outline-none focus:border-blue-500 text-white shadow-lg">
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      @for (auto of autosFiltrados; track auto.id) {
+        <div class="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden shadow-xl flex flex-col justify-between">
+          <img [src]="obtenerUrlImagen(auto.imagen)" [alt]="auto.nombre" class="w-full h-48 object-cover">
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-xs uppercase tracking-wider text-blue-400 font-semibold">{{ auto.marca }}</span>
+              <h3 class="text-xl font-bold mt-1">{{ auto.nombre }}</h3>
+              <p class="text-gray-400 text-sm mt-2 line-clamp-2">{{ auto.descripcion }}</p>
+              <p class="text-2xl font-black text-green-400 mt-4">${{ auto.precio }} USD</p>
+            </div>
+            
+            <div class="flex gap-2 mt-6">
+              <button (click)="verDetalles(auto)" class="flex-1 bg-gray-700 hover:bg-gray-600 py-2 rounded-lg text-sm font-medium transition">
+                Detalles
+              </button>
+              <button (click)="agregarAlCarrito(auto)" class="flex-1 bg-blue-600 hover:bg-blue-500 py-2 rounded-lg text-sm font-medium transition">
+                Comprar
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (autoSeleccionado) {
+      <div class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
+        <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl max-w-lg w-full relative shadow-2xl">
+          <button (click)="cerrarDetalles()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">✕</button>
+          
+          <img [src]="obtenerUrlImagen(autoSeleccionado.imagen)" [alt]="autoSeleccionado.nombre" class="w-full h-60 object-cover rounded-xl mb-4">
+          
+          <span class="text-xs uppercase tracking-wider text-blue-400 font-semibold">{{ autoSeleccionado.marca }}</span>
+          <h2 class="text-2xl font-bold mt-1">{{ autoSeleccionado.nombre }}</h2>
+          <p class="text-gray-300 text-sm mt-3 leading-relaxed">{{ autoSeleccionado.descripcion }}</p>
+          <p class="text-3xl font-black text-green-400 mt-6">${{ autoSeleccionado.precio }} USD</p>
+          
+          <button (click)="agregarAlCarrito(autoSeleccionado); cerrarDetalles()" class="w-full mt-6 bg-blue-600 hover:bg-blue-500 py-3 rounded-xl font-bold transition">
+            Añadir al Carrito <i class="fa-solid fa-car"></i>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
